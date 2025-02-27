@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-5">Cadastro de Usuário</h2>
+
+        <form id="cadastroForm">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" id="nome" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" id="senha" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </form>
+
+        <div class="mt-3" id="mensagem"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.getElementById('cadastroForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Obtendo os valores dos campos do formulário
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            // Criando o objeto usuário
+            const usuario = { nome, email, senha };
+
+            // Enviando a requisição para a API
+            fetch('http://localhost:3000/api/cadastro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(usuario),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const mensagem = document.getElementById('mensagem');
+                mensagem.classList.add('alert', 'alert-success');
+                mensagem.innerText = data.message; // Mensagem do servidor
+            })
+            .catch(error => {
+                const mensagem = document.getElementById('mensagem');
+                mensagem.classList.add('alert', 'alert-danger');
+                mensagem.innerText = 'Erro ao cadastrar o usuário'; // Erro de cadastro
+            });
+        });
+    </script>
+</body>
+</html>
